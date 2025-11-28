@@ -2,16 +2,24 @@ import os
 import json
 import gradio as gr
 from pathlib import Path
+from huggingface_hub import hf_hub_download
+
+# Global variables
+MODELS = None
 
 # Load models from JSON files, create default if missing
 def load_models():
+    global MODELS
+    if MODELS is not None:
+        return MODELS
+    
     models_file = "models.json"
     defaults_file = "models.json.defaults"
     
     # Try to load custom models file first
     if os.path.exists(models_file):
         with open(models_file, 'r') as f:
-            return json.load(f)
+            MODELS = json.load(f)
     # Fallback to defaults and create the file
     elif os.path.exists(defaults_file):
         with open(defaults_file, 'r') as f:
@@ -21,26 +29,82 @@ def load_models():
         with open(models_file, 'w') as f:
             json.dump(default_models, f, indent=2)
         
-        return default_models
+        MODELS = default_models
     else:
         raise FileNotFoundError("No models.json or models.json.defaults found")
+    
+    return MODELS
 
 # Get model names for dropdown
 def get_model_names():
     models = load_models()
     return [model["custom_name"] for model in models]
 
+# Download model if it doesn't exist
+def download_model(model_info):
+    hf_repo = model_info["hf_repo"]
+    model_file = model_info["model_file"]
+    tags_file = model_info["tags_file"]
+    local_folder = model_info.get("local_folder")
+    
+    # Determine where to download the model
+    if local_folder:
+        # Use specified local folder
+        download_path = Path(local_folder)
+        download_path.mkdir(parents=True, exist_ok=True)
+    else:
+        # Use Hugging Face cache
+        download_path = Path.home() / ".cache" / "huggingface" / "hub"
+    
+    # Check if model files already exist
+    model_path = download_path / model_file
+    tags_path = download_path / tags_file
+    
+    if not model_path.exists() or not tags_path.exists():
+        print(f"Downloading model {hf_repo} to {download_path}")
+        # Download just the specific files we need
+        hf_hub_download(
+            repo_id=hf_repo,
+            filename=model_file,
+            local_dir=download_path,
+        )
+        hf_hub_download(
+            repo_id=hf_repo,
+            filename=tags_file,
+            local_dir=download_path,
+        )
+    
+    return str(download_path)
+
 # Process images function
 def process_images(image_folder, model_name, caption_extension, caption_separator, 
                   threshold, character_threshold, recursive, debug):
-
+    
+    # Find the selected model
+    models = load_models()
+    selected_model = None
+    for model in models:
+        if model["custom_name"] == model_name:
+            selected_model = model
+            break
+    
+    if not selected_model:
+        return "Error: Model not found", "Error: Model not found"
+    
+    # Download model if needed
+    try:
+        model_path = download_model(selected_model)
+    except Exception as e:
+        return f"Error downloading model: {str(e)}", f"Error downloading model: {str(e)}"
+    
     result = None
     report = None
+    
     return result, report
 
 # Main Gradio app
 def create_app():
-    models = load_models()
+    load_models()  # Load models once at startup
     
     with gr.Blocks(title="WD14/E621 Tagger") as demo:
         gr.Markdown("# WD14/E621 Tagger")
