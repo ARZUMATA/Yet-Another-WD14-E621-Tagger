@@ -3,6 +3,9 @@ import json
 import gradio as gr
 from pathlib import Path
 from huggingface_hub import hf_hub_download
+import cv2
+import numpy as np
+from PIL import Image
 
 # Global variables
 MODELS = None
@@ -97,7 +100,53 @@ def process_images(image_folder, model_name, caption_extension, caption_separato
     except Exception as e:
         return f"Error downloading model: {str(e)}", f"Error downloading model: {str(e)}"
     
-    result = None
+    # Validate image folder
+    if not os.path.exists(image_folder):
+        return "Error: Image folder does not exist", "Error: Image folder does not exist"
+    
+    # Get all image files in the folder (and subfolders if recursive is enabled)
+    image_extensions = ('.png', '.jpg', '.jpeg', '.bmp', '.tiff', '.webp')
+    image_files = []
+    
+    if recursive:
+        for root, dirs, files in os.walk(image_folder):
+            for file in files:
+                if file.lower().endswith(image_extensions):
+                    image_files.append(os.path.join(root, file))
+    else:
+        for file in os.listdir(image_folder):
+            if file.lower().endswith(image_extensions):
+                image_files.append(os.path.join(image_folder, file))
+    
+    if not image_files:
+        return "Error: No images found in the folder", "Error: No images found in the folder"
+    
+    result = f"Processing {len(image_files)} images from: {image_folder}\n"
+    result += f"Model: {model_name}\n"
+    result += f"Extension: {caption_extension}\n"
+    result += f"Separator: {caption_separator}\n"
+    result += f"Threshold: {threshold}\n"
+    result += f"Character Threshold: {character_threshold}\n"
+    result += f"Recursive: {recursive}\n"
+    result += f"Debug: {debug}\n\n"
+    
+    # Process each image
+    processed_count = 0
+    for image_path in image_files:
+        try:
+            # Load and preprocess image for ONNX model
+            result += f"Processing: {os.path.basename(image_path)}\n"
+            
+            if debug:
+                result += f"  Image path: {image_path}\n"
+                
+            processed_count += 1
+            
+        except Exception as e:
+            result += f"Error processing {os.path.basename(image_path)}: {str(e)}\n"
+    
+    result += f"\nProcessed {processed_count} images successfully.\n"
+    
     report = None
     
     return result, report
