@@ -1,0 +1,74 @@
+[
+  {
+    "custom_name": "SmilingWolf/wd-v1-4-convnext-tagger-v2",
+    "hf_repo": "SmilingWolf/wd-v1-4-convnext-tagger-v2",
+    "type": "wd14",
+    "model_file": "model.onnx",
+    "tags_file": "selected_tags.csv",
+    "local_folder": "./models/SmilingWolf_wd-v1-4-convnext-tagger-v2"
+  },
+  {
+    "custom_name": "SmilingWolf/wd-v1-4-convnextv2-tagger-v2",
+    "hf_repo": "SmilingWolf/wd-v1-4-convnextv2-tagger-v2",
+    "type": "wd14",
+    "model_file": "model.onnx",
+    "tags_file": "selected_tags.csv",
+    "local_folder": "./models/SmilingWolf_wd-v1-4-convnextv2-tagger-v2"
+  },
+  {
+    "custom_name": "SmilingWolf/wd-v1-4-vit-tagger-v2",
+    "hf_repo": "SmilingWolf/wd-v1-4-vit-tagger-v2",
+    "type": "wd14",
+    "model_file": "model.onnx",
+    "tags_file": "selected_tags.csv",
+    "local_folder": "./models/SmilingWolf_wd-v1-4-vit-tagger-v2"
+  },
+  {
+    "custom_name": "SmilingWolf/wd-v1-4-swinv2-tagger-v2",
+    "hf_repo": "SmilingWolf/wd-v1-4-swinv2-tagger-v2",
+    "type": "wd14",
+    "model_file": "model.onnx",
+    "tags_file": "selected_tags.csv",
+    "local_folder": "./models/SmilingWolf_wd-v1-4-swinv2-tagger-v2"
+  },
+  {
+    "custom_name": "SmilingWolf/wd-v1-4-moat-tagger-v2",
+    "hf_repo": "SmilingWolf/wd-v1-4-moat-tagger-v2",
+    "type": "wd14",
+    "model_file": "model.onnx",
+    "tags_file": "selected_tags.csv",
+    "local_folder": "./models/SmilingWolf_wd-v1-4-moat-tagger-v2"
+  },
+  {
+    "custom_name": "SmilingWolf/wd-swinv2-tagger-v3",
+    "hf_repo": "SmilingWolf/wd-swinv2-tagger-v3",
+    "type": "wd14",
+    "model_file": "model.onnx",
+    "tags_file": "selected_tags.csv",
+    "local_folder": "./models/SmilingWolf_wd-swinv2-tagger-v3"
+  },
+  {
+    "custom_name": "SmilingWolf/wd-vit-tagger-v3",
+    "hf_repo": "SmilingWolf/wd-vit-tagger-v3",
+    "type": "wd14",
+    "model_file": "model.onnx",
+    "tags_file": "selected_tags.csv",
+    "local_folder": "./models/SmilingWolf_wd-vit-tagger-v3"
+  },
+  {
+    "custom_name": "SmilingWolf/wd-convnext-tagger-v3",
+    "hf_repo": "SmilingWolf/wd-convnext-tagger-v3",
+    "type": "wd14",
+    "model_file": "model.onnx",
+    "tags_file": "selected_tags.csv",
+    "local_folder": "./models/SmilingWolf_wd-convnext-tagger-v3"
+  },
+  {
+    "custom_name": "toynya/Z3D-E621-Convnext",
+    "hf_repo": "toynya/Z3D-E621-Convnext",
+    "type": "e621",
+    "model_file": "model.onnx",
+    "tags_file": "tags-selected.csv",
+    "local_folder": "./models/toynya_Z3D-E621-Convnext"
+  }
+]
